@@ -11,8 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
@@ -21,19 +23,17 @@ public class CategoryServiceImpl implements CategoryService {
     private CategoryRepository categoryRepo;
 
     @Autowired
-    private ModelMapper modelMapper;
+    private ModelMapper mapper;
 
     @Override
     public Boolean saveCategory(CategoryDto categoryDto) {
 
+//		Category category = new Category();
+//		category.setName(categoryDto.getName());
+//		category.setDescription(categoryDto.getDescription());
+//		category.setIsActive(categoryDto.getIsActive());
 
-        //Traditional method for convert Categorydto to category
-//        Category category = new Category();
-//        category.setName(categoryDto.getName());
-//        category.setDescription(categoryDto.getDescription());
-//        category.setIsActive(categoryDto.getIsActive());
-
-        Category category = modelMapper.map(categoryDto, Category.class);
+        Category category = mapper.map(categoryDto, Category.class);
 
         category.setIsDeleted(false);
         category.setCreatedBy(1);
@@ -43,28 +43,49 @@ public class CategoryServiceImpl implements CategoryService {
             return false;
         }
         return true;
-
-
     }
 
     @Override
     public List<CategoryDto> getAllCategory() {
         List<Category> categories = categoryRepo.findAll();
 
-        List<CategoryDto> categorylist = categories.stream().map(cat -> modelMapper.map(cat, CategoryDto.class)).toList();
+        List<CategoryDto> categoryDtoList = categories.stream().map(cat -> mapper.map(cat, CategoryDto.class)).toList();
 
-        return categorylist;
+        return categoryDtoList;
     }
 
     @Override
     public List<CategoryReponse> getActiveCategory() {
 
         List<Category> categories = categoryRepo.findByIsActiveTrueAndIsDeletedFalse();
-        List<CategoryReponse> categoryList = categories.stream().map(cat -> modelMapper.map(cat, CategoryReponse.class))
+        List<CategoryReponse> categoryList = categories.stream().map(cat -> mapper.map(cat, CategoryReponse.class))
                 .toList();
         return categoryList;
     }
 
+    @Override
+    public CategoryDto getCategoryById(Integer id) {
 
+        Optional<Category> findByCatgeory = categoryRepo.findByIdAndIsDeletedFalse(id);
+
+        if (findByCatgeory.isPresent()) {
+            Category category = findByCatgeory.get();
+            return mapper.map(category, CategoryDto.class);
+        }
+        return null;
+    }
+
+    @Override
+    public Boolean deleteCategory(Integer id) {
+        Optional<Category> findByCatgeory = categoryRepo.findById(id);
+
+        if (findByCatgeory.isPresent()) {
+            Category category = findByCatgeory.get();
+            category.setIsDeleted(true);
+            categoryRepo.save(category);
+            return true;
+        }
+        return false;
+    }
 
 }
