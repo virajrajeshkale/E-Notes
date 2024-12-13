@@ -8,6 +8,7 @@ public class ENotesApiServicesApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(ENotesApiServicesApplication.class, args);
+		System.out.println("#### PROJECT STARTED..");
 	}
 
 }
