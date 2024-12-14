@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.Date;
 
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -28,19 +29,4 @@ public class CategoryDto {
     private Integer updatedBy;
 
     private Date updatedOn;
-
-    @Getter
-    @Setter
-    @AllArgsConstructor
-    @NoArgsConstructor
-
-    public static class CategoryResponse {
-
-        private Integer id;
-
-        private String name;
-
-        private String description;
-
-    }
 }
