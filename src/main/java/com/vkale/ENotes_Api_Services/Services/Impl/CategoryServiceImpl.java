@@ -4,6 +4,7 @@ package com.vkale.ENotes_Api_Services.Services.Impl;
 import com.vkale.ENotes_Api_Services.Dto.CategoryDto;
 import com.vkale.ENotes_Api_Services.Dto.CategoryReponse;
 import com.vkale.ENotes_Api_Services.Entity.Category;
+import com.vkale.ENotes_Api_Services.Exception.ResourceNotFoundException;
 import com.vkale.ENotes_Api_Services.Repository.CategoryRepository;
 import com.vkale.ENotes_Api_Services.Services.CategoryService;
 import org.modelmapper.ModelMapper;
@@ -11,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.util.Collections;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -81,13 +82,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getCategoryById(Integer id) {
+    public CategoryDto getCategoryById(Integer id ) throws ResourceNotFoundException  {
 
-        Optional<Category> findByCategory = categoryRepo.findByIdAndIsDeletedFalse(id);
+      Category findByCategory = categoryRepo.findByIdAndIsDeletedFalse(id).orElseThrow(()->new ResourceNotFoundException("Category Not Found for ID :"+id));
 
-        if (findByCategory.isPresent()) {
-            Category category = findByCategory.get();
-            return mapper.map(category, CategoryDto.class);
+        if (!ObjectUtils.isEmpty(findByCategory))
+        {
+            return mapper.map(findByCategory, CategoryDto.class);
         }
         return null;
     }
