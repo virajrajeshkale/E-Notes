@@ -22,10 +22,10 @@ public class Category extends BaseModel {
 
     private String name;
 
-    private String model;
+    private String description;
 
-    private Boolean year;
+    private Boolean isActive;
 
-    private Boolean price;
+    private Boolean isDeleted;
 
 }
