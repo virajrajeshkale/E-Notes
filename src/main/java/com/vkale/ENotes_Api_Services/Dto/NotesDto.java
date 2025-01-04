@@ -29,13 +29,13 @@ public class NotesDto {
 
     private Date updatedOn;
 
-//    @Getter
-//    @Setter
-//    @AllArgsConstructor
-//    @NoArgsConstructor
-//    public static class CategoryDto {
-//        private Integer id;
-//        private String name;
-//    }
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CategoryDto {
+        private Integer id;
+        private String name;
+    }
 
 }
