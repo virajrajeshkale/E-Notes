@@ -4,6 +4,7 @@ package com.vkale.ENotes_Api_Services.Services.Impl;
 import com.vkale.ENotes_Api_Services.Dto.CategoryDto;
 import com.vkale.ENotes_Api_Services.Dto.CategoryResponse;
 import com.vkale.ENotes_Api_Services.Entity.Category;
+import com.vkale.ENotes_Api_Services.Exception.ExistDataException;
 import com.vkale.ENotes_Api_Services.Exception.ResourceNotFoundException;
 import com.vkale.ENotes_Api_Services.Repository.CategoryRepository;
 import com.vkale.ENotes_Api_Services.Services.CategoryService;
@@ -35,6 +36,13 @@ public class CategoryServiceImpl implements CategoryService {
 
         // Validation Checking
         validation.categoryValidation(categoryDto);
+
+        // check category exist or not
+        Boolean exist = categoryRepo.existsByName(categoryDto.getName().trim());
+        if (exist) {
+            // throw error
+            throw new ExistDataException("Category already exist");
+        }
 
         Category category = mapper.map(categoryDto, Category.class);
 
