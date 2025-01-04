@@ -15,7 +15,7 @@ import org.springframework.util.ObjectUtils;
 import java.util.List;
 
 @Service
-public class NotesServieImpl implements NotesService {
+public class NotesServiceImpl implements NotesService {
 
     @Autowired
     private NotesRepository notesRepo;
@@ -48,4 +48,5 @@ public class NotesServieImpl implements NotesService {
     public List<NotesDto> getAllNotes() {
         return notesRepo.findAll().stream().map(note -> mapper.map(note, NotesDto.class)).toList();
     }
+
 }
